@@ -1,25 +1,33 @@
 On Error Resume Next
+Set objFSO = CreateObject("Scripting.FileSystemObject")
+
+WScript.Echo "+++++++++++++++++++++++++++++++++++++++++++++++++++"
 WScript.Echo "Mulai menjalankan skrip VBScript..."
-WScript.Echo "Argumen 1 (Nama File Excel): " & WScript.Arguments.Item(0)
-WScript.Echo "Argumen 2 (Nama Makro): " & WScript.Arguments.Item(1)
-WScript.Echo "----------------------------------------------------"
+WScript.Echo ""
+WScript.Echo "Nama File Excel: " & objFSO.GetFileName(WScript.Arguments.Item(0))
+WScript.Echo "Nama Makro: " & WScript.Arguments.Item(1)
+WScript.Echo ""
 
 Set objExcel = CreateObject("Excel.Application")
 objExcel.Visible = False
+objExcel.DisplayAlerts = False
 
-Set objWorkbook = objExcel.Workbooks.Open(WScript.Arguments.Item(0))
+Set objWorkbook = objExcel.Workbooks.Open(WScript.Arguments.Item(0), , True)
 
 If objWorkbook Is Nothing Then
-    WScript.Echo "Error: File tidak ditemukan atau tidak dapat dibuka."
-    WScript.Quit
+    WScript.Echo "Error: File tidak ditemukan atau tidak bisa dibuka."
+    WScript.Echo "+++++++++++++++++++++++++++++++++++++++++++++++++++"
+    WScript.Quit 1
 End If
 
 objExcel.Application.Run "'" & objWorkbook.Name & "'!" & WScript.Arguments.Item(1)
 
-objWorkbook.Close
+objWorkbook.Close False
 objExcel.Quit
 
 Set objWorkbook = Nothing
 Set objExcel = Nothing
 
-WScript.Echo "Selesai menjalankan skrip VBScript."
+WScript.Echo "Success: Proses konversi selesai."
+WScript.Echo "+++++++++++++++++++++++++++++++++++++++++++++++++++"
+WScript.Quit 0
