@@ -1,5 +1,5 @@
 # xlsx_fuse_and_merge_to_csv
-Program to merge bunch of xlsx files into single csv file
+Program to merge bunch of xlsx files into single file
 
 # How to use
 1. Prepare the Folder : Create a new folder (directory) on your computer. This will be your workspace.
