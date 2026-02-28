@@ -4,6 +4,21 @@ setlocal enabledelayedexpansion
 cls
 
 title Fusion Tool v1.1
+
+set "sysDir=%~dp0FusionTool"
+set "CONFIG_FILE=%sysDir%\setting.txt"
+
+if exist "%CONFIG_FILE%" (
+    for /f "tokens=1,2 delims==" %%A in (%CONFIG_FILE%) do (
+        set "%%A=%%B"
+    )
+) else (
+    echo File setting.txt tidak ditemukan! Menggunakan default...
+    echo.
+    set "NAMA_HASIL=file_gabungan"
+    set "JML_HEADER=1"
+)
+
 echo ===================================================
 echo    Skrip Otomatis Konversi dan Penggabungan CSV 
 echo ===================================================
@@ -13,7 +28,7 @@ echo [1]  Memulai proses konversi Excel ke CSV...
 echo ===================================================
 echo.
 
-cscript.exe //nologo run_macro.vbs "%~dp0ConvertToCSV.xlsm" "ConvertXLS_to_CSV_From_Script"
+cscript.exe //nologo "%sysDir%\run_macro.vbs" "%sysDir%\ConvertToCSV.xlsm" "ConvertXLS_to_CSV_From_Script" "%NAMA_HASIL%"
 
 if %errorlevel% neq 0 (
     color 0C
@@ -32,7 +47,7 @@ echo [2]  Memulai proses penggabungan file CSV...
 echo ===================================================
 echo.
 
-set "output_file=file_gabungan.csv"
+set "output_file=%NAMA_HASIL%.csv"
 
 rem Hapus file output jika sudah ada
 if exist "%output_file%" del "%output_file%"
@@ -66,7 +81,7 @@ for %%f in (*.csv) do (
     if /i not "%%f"=="%first_file%" (
         if /i not "%%f"=="%output_file%" (
             rem mulai dari baris ke 1
-            more +1 "%%f" >> "%output_file%"
+            more +%JML_HEADER% "%%f" >> "%output_file%"
             rem hapus csv setelah ditempel ke file output
             del "%%f"
         )
@@ -75,7 +90,7 @@ for %%f in (*.csv) do (
 
 echo Penggabungkan selesai...
 
-goto :skipopsi
+goto :skipxls
 rem start of opsi pilihan
 color 0E
 echo.
@@ -87,7 +102,6 @@ echo ===================================================
 if errorlevel 2 goto :skipxls
 if errorlevel 1 goto :lanjut
 rem end of opsi pilihan
-:skipopsi
 
 :lanjut
 echo.
@@ -96,12 +110,12 @@ echo [3]  Mengonversi hasil gabungan ke Excel...
 echo ===================================================
 echo.
 
-set "output_file2=file_gabungan.xlsx"
+set "output_file2=%NAMA_HASIL%.xlsx"
 
 rem Hapus file output jika sudah ada
 if exist "%output_file2%" del "%output_file2%"
 
-cscript.exe //nologo run_macro.vbs "%~dp0ConvertToCSV.xlsm" "ConvertFinalCSV_to_XLSX"
+cscript.exe //nologo "%sysDir%\run_macro.vbs" "%sysDir%\ConvertToCSV.xlsm" "ConvertFinalCSV_to_XLSX" "%NAMA_HASIL%"
 
 if %errorlevel% neq 0 (
     color 0C
@@ -124,10 +138,10 @@ cls
 echo.
 color 0A
 echo ===================================================
-echo          Proses penggabungan berhasil!
-echo   Harap untuk memeriksa file hasil penggabungan
+echo           Proses penggabungan berhasil!
+echo    Harap untuk memeriksa file hasil penggabungan
 echo ===================================================
-echo      *File output: %output_file%
+echo         *File output: %output_file%
 echo ===================================================
 echo.
 pause

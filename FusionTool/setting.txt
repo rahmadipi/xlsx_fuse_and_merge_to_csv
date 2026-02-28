@@ -1,0 +1,2 @@
+JML_HEADER=1
+NAMA_HASIL=file_gabungan
