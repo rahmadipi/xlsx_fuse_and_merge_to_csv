@@ -1,7 +1,7 @@
 On Error Resume Next
 Set objFSO = CreateObject("Scripting.FileSystemObject")
 
-Dim excelPath, macroName, outputPath
+Dim excelPath, macroName, namaHasil
 excelPath  = WScript.Arguments.Item(0)
 macroName  = WScript.Arguments.Item(1)
 namaHasil = WScript.Arguments.Item(2)

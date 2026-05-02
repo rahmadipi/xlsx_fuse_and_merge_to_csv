@@ -1,0 +1,1 @@
+taskkill /f /im excel.exe /t 2>nul
