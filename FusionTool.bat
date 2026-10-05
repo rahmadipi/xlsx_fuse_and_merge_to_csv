@@ -1,6 +1,7 @@
 @echo off
 mode con: cols=52 lines=30
-setlocal enabledelayedexpansion
+setlocal
+cd /d "%~dp0"
 cls
 
 title Fusion Tool v1.1
@@ -9,7 +10,7 @@ set "sysDir=%~dp0FusionTool"
 set "CONFIG_FILE=%sysDir%\setting.txt"
 
 if exist "%CONFIG_FILE%" (
-    for /f "tokens=1,2 delims==" %%A in (%CONFIG_FILE%) do (
+    for /f "usebackq tokens=1,2 delims==" %%A in ("%CONFIG_FILE%") do (
         set "%%A=%%B"
     )
 ) else (
